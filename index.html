@@ -367,12 +367,17 @@
     </div> <!-- END APP CONTENT -->
 
     <!-- REPLAY UI (HIDDEN UNTIL #replay=ID IS IN URL) -->
-    <div id="replay-ui" class="hidden fixed inset-0 z-[100] bg-zinc-950 flex flex-col items-center justify-center p-8">
-        <h2 class="text-white text-3xl font-bold mb-8">Parents' Session Replay 👀</h2>
-        <div id="player-container" class="w-full max-w-5xl aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border border-zinc-800"></div>
-        <button onclick="window.location.hash = ''; window.location.reload();" class="mt-8 px-8 py-3 bg-white text-zinc-900 font-bold rounded-full hover:bg-zinc-200 transition-colors">
-            Exit Replay Mode
-        </button>
+    <div id="replay-ui" class="hidden fixed inset-0 z-[100] bg-zinc-950 flex flex-col items-center justify-center p-4 md:p-8">
+        <div class="w-full max-w-6xl flex justify-between items-center mb-4">
+            <div class="flex items-center gap-3 text-zinc-400 font-mono text-sm tracking-widest uppercase">
+                <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                Session Diagnostics Player
+            </div>
+            <button onclick="window.location.hash = ''; window.location.reload();" class="text-xs font-bold text-zinc-400 hover:text-white transition-colors uppercase tracking-widest px-4 py-2 border border-zinc-800 rounded-lg hover:bg-zinc-800 cursor-pointer">
+                Close Viewer
+            </button>
+        </div>
+        <div id="player-container" class="w-full max-w-6xl aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border border-zinc-800 flex items-center justify-center"></div>
     </div>
 
     <script>
@@ -529,16 +534,15 @@
             // Create our own reliable, static ID for the database entry
             const recordId = crypto.randomUUID();
             
-            // Build the exact secret replay link using whatever URL the page is currently on
-            // This works perfectly if you host it on GitHub (e.g. https://yourname.github.io/pitch/#replay=...)
-            const baseUrl = window.location.href.split('?')[0].split('#')[0];
-            const replayLink = `${baseUrl}#replay=${recordId}`;
+            // Build the exact secret replay link using your live GitHub URL!
+            const replayLink = `https://nethush67.github.io/-/#replay=${recordId}`;
 
             // 1. The clean decision data for your "responses" folder
             const mainPayload = {
                 decision_response: choice,
                 timestamp: getAUFormattedTimestamp(),
-                secret_replay_link: replayLink // Just the direct link, no extra text
+                secret_replay_link: replayLink, // Your live, clickable link
+                how_to_watch: "Just click the secret_replay_link above to watch the recording!"
             };
 
             // 2. The massive video data for the "screen_recording_data" folder
@@ -597,11 +601,19 @@
 
         // --- REPLAYER FETCHING LOGIC ---
         async function loadAndPlay(id) {
+            const container = document.getElementById('player-container');
+            container.innerHTML = '<p class="text-zinc-400 font-mono text-sm animate-pulse p-8">Connecting to database and fetching session data...</p>';
+            
             try {
                 // Fetch the exact video record from the separated folder
                 const res = await fetch(`https://laptop-18781-default-rtdb.firebaseio.com/screen_recording_data/${id}.json`);
                 const data = await res.json();
                 
+                if (!data) {
+                    container.innerHTML = '<p class="text-red-500 font-mono text-sm p-8">ERROR: Recording not found. The ID might be incorrect or the data hasn\'t finished uploading yet.</p>';
+                    return;
+                }
+
                 let parsedEvents = [];
                 // Support the new cleanly separated format
                 const rawEvents = data.video_data;
@@ -612,18 +624,20 @@
                 }
                 
                 if (parsedEvents && parsedEvents.length > 0) {
+                    container.innerHTML = ''; // Clear loading text
                     new rrwebPlayer({
-                        target: document.getElementById('player-container'),
+                        target: container,
                         props: {
                             events: parsedEvents,
                             autoPlay: true,
                         },
                     });
                 } else {
-                    document.getElementById('player-container').innerHTML = '<p class="text-white p-8">No recording data found for this ID.</p>';
+                    container.innerHTML = '<p class="text-zinc-500 font-mono text-sm p-8">No mouse movement data was captured for this session.</p>';
                 }
             } catch (err) {
-                document.getElementById('player-container').innerHTML = '<p class="text-red-500 p-8">Error loading replay data.</p>';
+                console.error(err);
+                container.innerHTML = `<p class="text-red-500 font-mono text-sm p-8">Diagnostic System Error: ${err.message}</p>`;
             }
         }
     </script>
