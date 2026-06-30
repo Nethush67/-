@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Christmas Pitch</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- rrweb: Invisible Session & Mouse Recording (Using known stable UMD versions to prevent export errors) -->
+    <script src="https://cdn.jsdelivr.net/npm/rrweb@1.1.3/dist/rrweb.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/rrweb-player@1.0.3/dist/index.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rrweb-player@1.0.3/dist/style.css" />
+
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            overflow: hidden; 
+            background-color: #ffffff; 
+        }
+        .reason-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reason-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        }
+        
+        /* Custom Scrollbar */
+        .scroll-container {
+            scrollbar-width: auto;
+            scrollbar-color: #cbd5e1 #f8fafc;
+        }
+        .scroll-container::-webkit-scrollbar {
+            width: 14px;
+        }
+        .scroll-container::-webkit-scrollbar-track {
+            background: #f8fafc;
+            border-left: 1px solid #e2e8f0;
+        }
+        .scroll-container::-webkit-scrollbar-thumb {
+            background-color: #94a3b8;
+            border-radius: 10px;
+            border: 3px solid #f8fafc;
+        }
+    </style>
+</head>
+<body class="text-zinc-900 min-h-screen flex flex-col items-center justify-start relative select-none bg-white">
+    
+    <!-- WRAPPER FOR THE PITCH APP -->
+    <div id="app-content" class="w-full h-full flex flex-col items-center pt-24 md:pt-40">
+        <!-- View 1: Main Content -->
+        <main class="z-10 flex flex-col items-center max-w-4xl px-6 text-center w-full">
+            <h1 class="text-2xl md:text-3xl lg:text-4xl font-extrabold mb-8 tracking-tight text-zinc-900 leading-tight">
+                It’s Christmas.<br>
+                <span class="text-red-600 font-extrabold">
+                    This is the present I want, but first… one thing.
+                </span>
+            </h1>
+
+            <!-- Question Title -->
+            <h3 class="text-lg md:text-xl font-bold text-zinc-700 mb-8">
+                Pick your favorite child to continue:
+            </h3>
+
+            <!-- Buttons Container -->
+            <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-6 items-center w-full max-w-3xl">
+                <div class="relative w-40 h-14">
+                    <button class="evasive absolute inset-0 w-full h-full flex items-center justify-center rounded-xl bg-white border border-zinc-200 hover:bg-zinc-50 text-zinc-700 text-base font-semibold shadow-sm cursor-pointer transition-colors z-40">
+                        Chesha
+                    </button>
+                </div>
+                <div class="relative w-40 h-14">
+                    <button id="nethush-btn" class="absolute inset-0 w-full h-full flex items-center justify-center rounded-xl bg-white border border-zinc-200 hover:bg-red-50 hover:border-red-300 hover:text-red-600 text-zinc-700 text-base font-semibold shadow-sm transition-all cursor-pointer z-30">
+                        Nethush
+                    </button>
+                </div>
+                <div class="relative w-40 h-14">
+                    <button class="evasive absolute inset-0 w-full h-full flex items-center justify-center rounded-xl bg-white border border-zinc-200 hover:bg-zinc-50 text-zinc-700 text-base font-semibold shadow-sm cursor-pointer transition-colors z-40">
+                        Tavish
+                    </button>
+                </div>
+                <div class="relative w-40 h-14">
+                    <button class="evasive absolute inset-0 w-full h-full flex items-center justify-center rounded-xl bg-white border border-zinc-200 hover:bg-zinc-50 text-zinc-700 text-base font-semibold shadow-sm cursor-pointer transition-colors z-40">
+                        None
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Success Screen Overlay (Holds all views) -->
+        <div id="success-screen" class="fixed inset-0 bg-white z-50 opacity-0 pointer-events-none transition-opacity duration-700 overflow-hidden flex justify-center">
+            
+            <div class="relative w-full max-w-[1400px] h-full flex items-start">
+                
+                <!-- View 2: The Present I Want -->
+                <div id="view-2" class="absolute inset-0 w-full h-full flex flex-col items-center justify-center pt-8 px-8 transition-all duration-700 ease-in-out transform scale-50 scroll-container">
+                    <h3 class="text-4xl md:text-5xl lg:text-6xl font-black text-zinc-900 mb-12 md:mb-16 tracking-tight text-center">
+                        The present I want
+                    </h3>
+                    
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16 w-full relative max-w-4xl">
+                        <div class="flex flex-col items-center w-full group">
+                            <h4 class="text-xs font-bold text-zinc-400 mb-4 uppercase tracking-widest text-center">
+                                What I got last time
+                            </h4>
+                            <div class="relative w-64 h-64 md:w-80 md:h-80 bg-white rounded-[2rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-zinc-100 flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
+                                <img src="https://reidbikes.com/cdn/shop/files/Reid_Rover_Side_5944fc83-9cc1-4d80-aa4c-3e8ca759b712.png?v=1730607910" alt="E-Scooter" class="w-full h-full object-contain opacity-70">
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center w-full group">
+                            <h4 class="text-xs font-bold text-red-600 mb-4 uppercase tracking-widest text-center">
+                                What I really want this year
+                            </h4>
+                            <div class="relative w-64 h-64 md:w-80 md:h-80 bg-white rounded-[2rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-zinc-100 flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
+                                <img src="https://hnau.imgix.net/media/catalog/product/1/3/13_g_16.jpg?trim=color&trimtol=10&fill=solid&bg=white&w=602&h=602&dpr=2&pad=24&auto=format%2Ccompress&fit=fill&fill-color=ffffff&q=85" alt="Laptop" class="w-full h-full object-contain">
+                            </div>
+                        </div>
+
+                        <button id="btn-why" class="fixed right-6 bottom-6 md:right-16 md:bottom-16 flex items-center gap-3 text-zinc-800 hover:text-zinc-600 transition-all duration-300 hover:scale-105 cursor-pointer z-50 bg-white shadow-[0_8px_20px_rgb(0,0,0,0.06)] border border-zinc-100 px-6 py-3 rounded-full font-bold tracking-widest text-xs uppercase">
+                            <span>Why?</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- View 3: Reasons Screen -->
+                <div id="view-3" class="absolute inset-0 w-full h-full flex flex-col items-center pt-10 md:pt-16 px-8 transition-all duration-700 ease-in-out transform translate-x-full opacity-0 pointer-events-none overflow-y-auto pb-24 scroll-container">
+                    <h3 class="text-4xl md:text-5xl lg:text-6xl font-black text-zinc-900 mb-4 tracking-tight text-center">
+                        Let's be completely honest
+                    </h3>
+                    
+                    <div class="animate-bounce mb-8 bg-zinc-100 text-zinc-500 text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider">
+                        Scroll down for detailed analysis ↓
+                    </div>
+
+                    <div class="flex flex-col lg:flex-row items-stretch justify-center gap-8 md:gap-12 w-full max-w-7xl relative">
+                        <div class="reason-card flex flex-col items-center flex-1 w-full bg-white rounded-[2rem] p-8 shadow-sm border border-zinc-200/60">
+                            <div class="min-h-[240px] lg:min-h-[520px] flex flex-col items-center text-center w-full mb-8">
+                                <h4 class="text-lg font-bold text-zinc-400 mb-5 uppercase tracking-widest">E-Scooter (The Toy)</h4>
+                                <ul class="text-base text-zinc-600 space-y-4 list-disc text-left px-4 max-w-md">
+                                    <li class="leading-relaxed"><span class="font-bold text-zinc-800">The 30-Day Dust Collector:</span> It's fun for exactly one month, but historically, novelty rides like this are abandoned and end up taking up space in the garage.</li>
+                                    <li class="leading-relaxed"><span class="font-bold text-zinc-800">Useless in bad weather:</span> I literally can't use it when it's raining, too cold, or getting dark early during the winter months.</li>
+                                    <li class="leading-relaxed font-bold text-red-500">Zero physical protection on the road with cars. Falling off is a guaranteed trip to the doctor.</li>
+                                </ul>
+                            </div>
+                            <div class="relative w-full aspect-video max-sm bg-zinc-50/50 rounded-2xl p-6 flex items-center justify-center mt-auto border border-zinc-100">
+                                <img src="https://reidbikes.com/cdn/shop/files/Reid_Rover_Side_5944fc83-9cc1-4d80-aa4c-3e8ca759b712.png?v=1730607910" alt="E-Scooter" class="max-h-44 object-contain drop-shadow-md grayscale opacity-80">
+                            </div>
+                        </div>
+
+                        <div class="reason-card flex flex-col items-center flex-1 w-full bg-white rounded-[2rem] p-8 shadow-md border border-zinc-200/80 border-t-4 border-t-red-600">
+                            <div class="min-h-[240px] lg:min-h-[520px] flex flex-col items-center text-center w-full mb-8">
+                                <span class="px-3 py-1 bg-red-50 text-red-600 text-[10px] font-bold uppercase tracking-widest rounded-full mb-3">Verified Cognitive Asset</span>
+                                <h4 class="text-lg font-bold text-red-600 mb-5 uppercase tracking-widest">Laptop (The Tool)</h4>
+                                <ul class="text-sm md:text-[15px] text-zinc-700 space-y-5 list-disc text-left px-4 max-w-xl">
+                                    <li class="leading-relaxed"><span class="font-bold text-zinc-900">The 4-Year Daily Driver:</span> I will use this consistently in a controlled, safe environment. It is an investment in my cognitive development, fast-paced decision making, and strategic logic—not just a disposable toy.</li>
+                                    <li class="leading-relaxed pt-2">
+                                        <div class="text-xs md:text-sm text-zinc-600 bg-red-50/40 p-4 rounded-2xl border border-red-100/40 leading-relaxed shadow-inner">
+                                            <div class="font-bold text-red-600 mb-1 flex items-center gap-1.5">Actually makes me smarter</div>
+                                            Studies absolutely prove that interactive computer use drastically improves working memory, logic processing, and cognitive reaction speeds. <a href="https://www.nih.gov/news-events/news-releases/video-gaming-may-be-associated-better-cognitive-performance-children" target="_blank" class="text-red-600 font-semibold underline hover:text-red-700">[NIH Study]</a>.
+                                        </div>
+                                    </li>
+                                    <li class="leading-relaxed pt-2">
+                                        <div class="text-xs md:text-sm text-zinc-600 bg-zinc-50 p-4 rounded-2xl border border-zinc-200/60 leading-relaxed shadow-inner">
+                                            <div class="font-bold text-zinc-800 mb-1 flex items-center gap-1.5">Regulated mental reset</div>
+                                            It provides a highly engaging, safe indoor environment to decompress mentally and train focus parameters. <a href="https://www.bbc.com/news/technology-54954622" target="_blank" class="text-zinc-800 font-semibold underline hover:text-zinc-900">[BBC Health]</a>.
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="relative w-full aspect-video max-w-sm bg-zinc-50/50 rounded-2xl p-6 flex items-center justify-center mt-auto border border-zinc-100">
+                                <img src="https://hnau.imgix.net/media/catalog/product/1/3/13_g_16.jpg?trim=color&trimtol=10&fill=solid&bg=white&w=602&h=602&dpr=2&pad=24&auto=format%2Ccompress&fit=fill&fill-color=ffffff&q=85" alt="Laptop" class="max-h-44 object-contain drop-shadow-md">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="btn-price" class="fixed right-6 bottom-6 md:right-16 md:bottom-16 flex items-center gap-3 text-zinc-800 hover:text-white hover:bg-zinc-900 transition-all duration-300 hover:scale-105 cursor-pointer z-50 bg-white shadow-[0_8px_20px_rgb(0,0,0,0.06)] border border-zinc-100 px-6 py-3 rounded-full font-bold tracking-widest text-xs uppercase">
+                        <span>Price</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+
+                <!-- View 4: Price Evaluation Screen -->
+                <div id="view-4" class="absolute inset-0 w-full h-full flex flex-col items-center pt-10 md:pt-16 px-8 transition-all duration-700 ease-in-out transform translate-x-full opacity-0 pointer-events-none overflow-y-auto pb-24 scroll-container">
+                    <h3 class="text-4xl md:text-5xl lg:text-6xl font-black text-zinc-900 mb-4 tracking-tight text-center">
+                        The Financial Reality
+                    </h3>
+
+                    <div class="animate-bounce mb-8 bg-zinc-100 text-zinc-500 text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider">
+                        Scroll down for ROI breakdown ↓
+                    </div>
+
+                    <div class="flex flex-col lg:flex-row items-stretch justify-center gap-8 md:gap-12 w-full max-w-7xl">
+                        <div class="reason-card flex flex-col items-center flex-1 w-full bg-white rounded-[2rem] p-8 shadow-sm border border-zinc-200/60">
+                            <div class="min-h-[280px] lg:min-h-[540px] flex flex-col items-center text-center w-full mb-8">
+                                <h4 class="text-lg font-bold text-zinc-400 mb-2 uppercase tracking-widest">E-Scooter</h4>
+                                <div class="text-3xl font-extrabold text-zinc-500 mb-6">~ $1,300</div>
+                                <ul class="text-base text-zinc-600 space-y-4 list-disc text-left px-4 max-w-md">
+                                    <li class="leading-relaxed">If I realistically only ride it on nice, clear days (maybe 30 days out of the entire year), it costs a ridiculous <span class="font-bold text-red-500">$43 every single time I use it</span>. This is literally burning money.</li>
+                                    <li class="leading-relaxed pt-2">
+                                        <div class="text-xs md:text-sm text-zinc-600 bg-red-50/40 p-4 rounded-2xl border border-red-100/40 leading-relaxed shadow-inner">
+                                            Plus, medical professionals constantly warn parents about the massive spike in severe injuries from kids falling off them. <a href="https://kidshealth.org/en/parents/escooter-safe.html" target="_blank" class="text-red-600 font-semibold underline hover:text-red-700">[KidsHealth Report]</a>.
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="relative w-full aspect-video max-sm bg-zinc-50/50 rounded-2xl p-6 flex items-center justify-center mt-auto border border-zinc-100">
+                                <img src="https://reidbikes.com/cdn/shop/files/Reid_Rover_Side_5944fc83-9cc1-4d80-aa4c-3e8ca759b712.png?v=1730607910" alt="E-Scooter" class="max-h-44 object-contain drop-shadow-md grayscale opacity-80">
+                            </div>
+                        </div>
+
+                        <div class="reason-card flex flex-col items-center flex-1 w-full bg-white rounded-[2rem] p-8 shadow-md border border-zinc-200/80 border-t-4 border-t-red-600">
+                            <div class="min-h-[280px] lg:min-h-[540px] flex flex-col items-center text-center w-full mb-8">
+                                <span class="px-3 py-1 bg-green-50 text-green-700 text-[10px] font-bold uppercase tracking-widest rounded-full mb-3">Maximum ROI Yield</span>
+                                <h4 class="text-lg font-bold text-red-600 mb-2 uppercase tracking-widest">Laptop</h4>
+                                <div class="text-3xl font-extrabold text-red-600 mb-6">~ $1,800</div>
+                                <p class="text-sm font-bold mb-4 bg-zinc-50 p-3 rounded-xl w-full text-zinc-800 border border-zinc-200">For $500 more, you get an absolute financial no-brainer:</p>
+                                <ul class="text-sm md:text-[15px] text-zinc-700 space-y-5 list-disc text-left px-4 max-w-xl">
+                                    <li class="leading-relaxed">If I use it every day for the next 4 years (1,460 days), the cost drops to an incredibly efficient <span class="font-bold text-green-600">$1.23 a day</span>.</li>
+                                    <li class="leading-relaxed pt-2">
+                                        <div class="text-xs md:text-sm text-zinc-600 bg-zinc-50 p-4 rounded-2xl border border-zinc-200/60 leading-relaxed shadow-inner">
+                                            Providing a high-performance computer is proven to be the absolute best way to build advanced digital fluency, spatial awareness, and technological comfort. <a href="https://www.bbc.com/storyworks/future/future-ready/laptop-learning-for-success" target="_blank" class="text-zinc-800 font-semibold underline hover:text-zinc-900">[BBC Education Study]</a>.
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="relative w-full aspect-video max-sm bg-zinc-50/50 rounded-2xl p-6 flex items-center justify-center mt-auto border border-zinc-100">
+                                <img src="https://hnau.imgix.net/media/catalog/product/1/3/13_g_16.jpg?trim=color&trimtol=10&fill=solid&bg=white&w=602&h=602&dpr=2&pad=24&auto=format%2Ccompress&fit=fill&fill-color=ffffff&q=85" alt="Laptop" class="max-h-44 object-contain drop-shadow-md">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="btn-stem" class="fixed right-6 bottom-6 md:right-16 md:bottom-16 flex items-center gap-3 text-zinc-800 hover:text-white hover:bg-zinc-900 transition-all duration-300 hover:scale-105 cursor-pointer z-50 bg-white shadow-[0_8px_20px_rgb(0,0,0,0.06)] border border-zinc-100 px-6 py-3 rounded-full font-bold tracking-widest text-xs uppercase">
+                        <span>STEM</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+
+                <!-- View 5: STEM Screen -->
+                <div id="view-5" class="absolute inset-0 w-full h-full flex flex-col items-center pt-8 md:pt-14 px-8 transition-all duration-700 ease-in-out transform translate-x-full opacity-0 pointer-events-none overflow-y-auto pb-24 bg-white scroll-container">
+                    
+                    <h3 class="text-3xl md:text-4xl lg:text-5xl font-black text-zinc-900 mb-4 tracking-tight text-center">
+                        🎮 5 Reasons Gaming is Actually Good for STEM
+                    </h3>
+
+                    <div class="animate-bounce mb-8 bg-zinc-100 text-zinc-500 text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider">
+                        Scroll to read the facts ↓
+                    </div>
+
+                    <!-- LAPTOP IN THE MIDDLE -->
+                    <div class="relative w-full aspect-video max-w-md bg-zinc-50/30 rounded-[2rem] p-6 shadow-md border border-zinc-100 flex items-center justify-center mb-10 transition-transform hover:scale-105 duration-500">
+                        <img src="https://hnau.imgix.net/media/catalog/product/1/3/13_g_16.jpg?trim=color&trimtol=10&fill=solid&bg=white&w=602&h=602&dpr=2&pad=24&auto=format%2Ccompress&fit=fill&fill-color=ffffff&q=85" alt="Laptop" class="max-h-40 object-contain drop-shadow-lg">
+                    </div>
+
+                    <!-- DETAILED PROOFS UNDER THE LAPTOP -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl text-left mb-8">
+                        
+                        <div class="p-5 bg-zinc-50/50 rounded-2xl border border-zinc-200/60 shadow-sm hover:-translate-y-1 transition-transform">
+                            <h4 class="font-bold text-red-600 mb-2 text-base">1. Quantitative Score Expansion</h4>
+                            <p class="text-xs text-zinc-700 leading-relaxed">
+                                Students who play online games regularly score 15 points higher in Math and 17 points higher in Science. It trains the brain to recognize patterns and analyze fast-moving data. <a href="https://www.theguardian.com/technology/2016/aug/08/positive-link-between-video-games-and-academic-performance-study-suggests" target="_blank" class="text-red-600 font-semibold underline hover:text-red-700">[The Guardian]</a>
+                            </p>
+                        </div>
+                        
+                        <div class="p-5 bg-zinc-50/50 rounded-2xl border border-zinc-200/60 shadow-sm hover:-translate-y-1 transition-transform">
+                            <h4 class="font-bold text-red-600 mb-2 text-base">2. Advanced Problem Solving</h4>
+                            <p class="text-xs text-zinc-700 leading-relaxed">
+                                Over 66% of adults and cognitive specialists directly credit interactive gaming with vastly improving complex problem-solving abilities and long-term strategic planning. <a href="https://www.youtube.com/watch?v=F-DIQsBPC-8&t=9" target="_blank" class="text-red-600 font-semibold underline hover:text-red-700">[Specialist Insights]</a>
+                            </p>
+                        </div>
+                        
+                        <div class="p-5 bg-zinc-50/50 rounded-2xl border border-zinc-200/60 shadow-sm hover:-translate-y-1 transition-transform">
+                            <h4 class="font-bold text-red-600 mb-2 text-base">3. Real Tech Comfort</h4>
+                            <p class="text-xs text-zinc-700 leading-relaxed">
+                                Navigating complex game interfaces and high-speed inputs builds advanced digital literacy and absolute comfort with modern technology hardware. <a href="https://www.bbc.com/news/articles/cwylgen9gqko" target="_blank" class="text-red-600 font-semibold underline hover:text-red-700">[BBC Tech]</a>
+                            </p>
+                        </div>
+                        
+                        <div class="p-5 bg-zinc-50/50 rounded-2xl border border-zinc-200/60 shadow-sm hover:-translate-y-1 transition-transform">
+                            <h4 class="font-bold text-red-600 mb-2 text-base">4. Learning Not to Quit</h4>
+                            <p class="text-xs text-zinc-700 leading-relaxed">
+                                Games are built on trial and error. You fail, you figure out why, and you adjust strategy until you win. That's exactly how the Scientific Method works. <a href="https://blog.aare.edu.au/you-should-be-encouraging-your-children-to-play-video-games-heres-why/" target="_blank" class="text-red-600 font-semibold underline hover:text-red-700">[AARE]</a>
+                            </p>
+                        </div>
+                        
+                        <div class="p-5 bg-zinc-50/50 rounded-2xl border border-zinc-200/60 shadow-sm md:col-span-2 hover:-translate-y-1 transition-transform">
+                            <h4 class="font-bold text-red-600 mb-2 text-base">5. Better Spatial Awareness</h4>
+                            <p class="text-xs text-zinc-700 leading-relaxed">
+                                Figuring out 3D maps and building structures in games forces your brain to understand geometry and physics in the real world. It's an active brain workout. <a href="https://theconversation.com/5-reasons-video-games-should-be-more-widely-used-in-school-164264" target="_blank" class="text-red-600 font-semibold underline hover:text-red-700">[The Conversation]</a>
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <button id="btn-good" class="fixed right-6 bottom-6 md:right-16 md:bottom-16 flex items-center gap-3 text-zinc-800 hover:text-white hover:bg-zinc-900 transition-all duration-300 hover:scale-105 cursor-pointer z-50 bg-white shadow-[0_8px_20px_rgb(0,0,0,0.06)] border border-zinc-100 px-6 py-3 rounded-full font-bold tracking-widest text-xs uppercase">
+                        <span>I was good</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+
+                <!-- View 6: Good Behavior Screen -->
+                <div id="view-6" class="absolute inset-0 w-full h-full flex flex-col items-center justify-center px-8 transition-all duration-700 ease-in-out transform translate-x-full opacity-0 pointer-events-none bg-white">
+                    <div class="max-w-2xl text-center flex flex-col items-center">
+                        <span class="px-4 py-1.5 rounded-full bg-green-50 text-green-700 text-xs font-bold uppercase tracking-wider mb-6 border border-green-200">Maturity & Responsibility Metrics</span>
+                        <h3 class="text-4xl md:text-5xl lg:text-6xl font-black text-zinc-900 mb-8 tracking-tight leading-tight">
+                            I've been good for the last 2 weeks, haven't I?
+                        </h3>
+                        <p class="text-zinc-600 text-base md:text-lg leading-relaxed mb-12">
+                            I've demonstrated consistent self-regulation, completed my household responsibilities, and shown I am mature enough to handle this asset.
+                        </p>
+                        <div class="w-24 h-24 rounded-full bg-green-50 flex items-center justify-center border border-green-200 shadow-sm animate-bounce">
+                            <svg class="w-12 h-12 text-green-600" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <button id="btn-next" class="fixed right-6 bottom-6 md:right-16 md:bottom-16 flex items-center gap-3 text-zinc-800 hover:text-white hover:bg-zinc-900 transition-all duration-300 hover:scale-105 cursor-pointer z-50 bg-white shadow-[0_8px_20px_rgb(0,0,0,0.06)] border border-zinc-100 px-6 py-3 rounded-full font-bold tracking-widest text-xs uppercase">
+                        <span>Next</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+
+                <!-- View 7: GUIDED DECISION SYSTEM -->
+                <div id="view-7" class="absolute inset-0 w-full h-full flex flex-col items-center justify-center px-8 transition-all duration-700 ease-in-out transform translate-x-full opacity-0 pointer-events-none bg-white">
+                    <div class="max-w-3xl text-center flex flex-col items-center w-full">
+                        <span class="px-4 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider mb-6 border border-blue-200">Final Assessment</span>
+                        <h3 class="text-4xl md:text-5xl lg:text-6xl font-black text-zinc-900 mb-8 tracking-tight leading-tight">
+                            Guided Decision Review
+                        </h3>
+                        <p class="text-zinc-700 text-base md:text-lg leading-relaxed mb-12 bg-zinc-50 p-6 rounded-2xl border border-zinc-100 shadow-sm">
+                            Based on the performance analysis, value breakdowns, and cognitive benefits presented above, do you think this is a reasonable choice for a laptop?
+                        </p>
+
+                        <div class="flex flex-col sm:flex-row items-center justify-center gap-6 w-full max-w-md">
+                            <!-- Premium, dominant, high-contrast "Yes" Button (Left) -->
+                            <button onclick="handleDecision('yes')" class="w-full sm:w-grow px-10 py-5 text-base font-bold text-white bg-zinc-950 hover:bg-zinc-800 rounded-xl shadow-xl hover:scale-105 transition-all">
+                                Yes, this makes sense
+                            </button>
+
+                            <!-- Tiny, visually uninviting, greyed out "No" Button (Right) -->
+                            <button onclick="handleDecision('no')" class="w-full sm:w-auto px-4 py-2 text-xs font-semibold text-zinc-400 bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 rounded-lg shadow-sm transition-all opacity-60 hover:opacity-100">
+                                No, I don't think so
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- View 8: Dynamic Dynamic Summary -->
+                <div id="view-8" class="absolute inset-0 w-full h-full flex flex-col items-center justify-center px-8 transition-all duration-700 ease-in-out transform translate-x-full opacity-0 pointer-events-none bg-white">
+                    <div class="max-w-3xl text-center flex flex-col items-center">
+                        <span id="final-badge" class="px-4 py-1.5 rounded-full bg-zinc-100 text-zinc-600 text-xs font-bold uppercase tracking-wider mb-6 border border-zinc-200">Processing...</span>
+                        <h3 id="final-title" class="text-5xl md:text-6xl lg:text-7xl font-black text-zinc-900 mb-8 tracking-tight leading-tight drop-shadow-sm">
+                            Decision Logged.
+                        </h3>
+                        <p id="final-body" class="text-zinc-600 text-xl font-medium tracking-wide mb-8">
+                            Saving your response...
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div> <!-- END APP CONTENT -->
+
+    <!-- REPLAY UI (HIDDEN UNTIL #replay=ID IS IN URL) -->
+    <div id="replay-ui" class="hidden fixed inset-0 z-[100] bg-zinc-950 flex flex-col items-center justify-center p-8">
+        <h2 class="text-white text-3xl font-bold mb-8">Parents' Session Replay 👀</h2>
+        <div id="player-container" class="w-full max-w-5xl aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border border-zinc-800"></div>
+        <button onclick="window.location.hash = ''; window.location.reload();" class="mt-8 px-8 py-3 bg-white text-zinc-900 font-bold rounded-full hover:bg-zinc-200 transition-colors">
+            Exit Replay Mode
+        </button>
+    </div>
+
+    <script>
+        // --- RRWEB RECORDING LOGIC ---
+        let events = [];
+        let stopRecordingFn = null;
+
+        // Check hash instead of query param to prevent 404 errors
+        const hash = window.location.hash;
+        const isReplay = hash.startsWith('#replay=');
+        const replayId = isReplay ? hash.replace('#replay=', '') : null;
+
+        if (isReplay) {
+            // Replay Mode Activated
+            document.getElementById('app-content').classList.add('hidden');
+            document.getElementById('replay-ui').classList.remove('hidden');
+            loadAndPlay(replayId);
+        } else {
+            // Normal Mode: Start silent recording
+            if (typeof rrweb !== 'undefined') {
+                stopRecordingFn = rrweb.record({
+                    emit(event) {
+                        events.push(event);
+                    }
+                });
+            }
+        }
+
+        // --- EVASIVE BUTTON LOGIC ---
+        const evasiveBtns = document.querySelectorAll('.evasive');
+        let lastMouseX = window.innerWidth / 2, lastMouseY = window.innerHeight / 2;
+        const TRIGGER_RADIUS = 120;
+
+        if (!isReplay) { // Only run evasive logic if we are not in replay mode
+            document.addEventListener('mousemove', (e) => {
+                lastMouseX = e.clientX; lastMouseY = e.clientY;
+                evasiveBtns.forEach(btn => {
+                    const rect = btn.getBoundingClientRect();
+                    const dist = Math.hypot(lastMouseX - (rect.left + rect.width / 2), lastMouseY - (rect.top + rect.height / 2));
+                    if (dist < TRIGGER_RADIUS) triggerEvasion(btn);
+                });
+            });
+        }
+
+        function triggerEvasion(btn) {
+            if (!btn.classList.contains('is-evading')) {
+                const rect = btn.getBoundingClientRect();
+                btn.classList.add('is-evading');
+                btn.style.left = rect.left + 'px'; btn.style.top = rect.top + 'px';
+                btn.style.position = 'fixed'; btn.style.width = rect.width + 'px'; btn.style.height = rect.height + 'px';
+                btn.style.zIndex = '50'; btn.style.margin = '0';
+                void btn.offsetWidth;
+                btn.style.transition = 'top 0.4s ease-out, left 0.4s ease-out, background-color 0.2s';
+            }
+            moveButton(btn);
+        }
+
+        function moveButton(btn) {
+            if (btn.isMoving) return;
+            btn.isMoving = true; setTimeout(() => { btn.isMoving = false; }, 400);
+            
+            const rect = btn.getBoundingClientRect();
+            const btnCenterX = rect.left + rect.width / 2;
+            const btnCenterY = rect.top + rect.height / 2;
+            
+            const angle = Math.atan2(btnCenterY - lastMouseY, btnCenterX - lastMouseX);
+            const moveDistance = 250;
+            
+            let newX = rect.left + Math.cos(angle) * moveDistance;
+            let newY = rect.top + Math.sin(angle) * moveDistance;
+            
+            const padding = 20;
+            const topBoundary = Math.max(padding, window.innerHeight * 0.4); 
+            const maxX = window.innerWidth - rect.width - padding;
+            const maxY = window.innerHeight - rect.height - padding;
+            
+            if (newX < padding || newX > maxX || newY < topBoundary || newY > maxY) {
+                const centerAngle = Math.atan2((window.innerHeight * 0.75) - btnCenterY, (window.innerWidth / 2) - btnCenterX);
+                newX = rect.left + Math.cos(centerAngle) * (moveDistance * 1.5); 
+                newY = rect.top + Math.sin(centerAngle) * (moveDistance * 1.5);
+            }
+            
+            btn.style.left = `${Math.max(padding, Math.min(maxX, newX))}px`; 
+            btn.style.top = `${Math.max(topBoundary, Math.min(maxY, newY))}px`;
+        }
+
+        window.addEventListener('resize', () => {
+            evasiveBtns.forEach(btn => {
+                if (btn.classList.contains('is-evading')) {
+                    moveButton(btn);
+                }
+            });
+        });
+
+        // ----------------------------------------------------
+        // NAVIGATION LOGIC
+        // ----------------------------------------------------
+
+        const nethushBtn = document.getElementById('nethush-btn'), 
+              successScreen = document.getElementById('success-screen'), 
+              views = [
+                  document.getElementById('view-2'), 
+                  document.getElementById('view-3'), 
+                  document.getElementById('view-4'), 
+                  document.getElementById('view-5'), 
+                  document.getElementById('view-6'), 
+                  document.getElementById('view-7'), 
+                  document.getElementById('view-8')
+              ];
+        
+        const navigate = (from, to) => {
+            from.classList.add('-translate-x-full', 'opacity-0', 'pointer-events-none');
+            setTimeout(() => from.classList.add('hidden'), 700);
+            to.classList.remove('translate-x-full', 'opacity-0', 'pointer-events-none');
+            to.classList.remove('hidden'); 
+        };
+
+        nethushBtn.addEventListener('click', () => {
+            successScreen.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => { views[0].classList.remove('scale-50'); views[0].classList.add('scale-100'); }, 50);
+        });
+
+        document.getElementById('btn-why').addEventListener('click', () => navigate(views[0], views[1]));
+        document.getElementById('btn-price').addEventListener('click', () => navigate(views[1], views[2]));
+        document.getElementById('btn-stem').addEventListener('click', () => navigate(views[2], views[3]));
+        document.getElementById('btn-good').addEventListener('click', () => navigate(views[3], views[4]));
+        document.getElementById('btn-next').addEventListener('click', () => navigate(views[4], views[5]));
+
+        // ----------------------------------------------------
+        // FIREBASE ANALYTICS & DYNAMIC SUMMARY LOGIC
+        // ----------------------------------------------------
+        
+        function getAUFormattedTimestamp() {
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+            
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12;
+            hours = hours ? hours : 12; 
+            
+            return `${day}/${month}/${year} ${hours}:${minutes}${ampm}`;
+        }
+
+        async function logDecision(choice) {
+            // Immediately stop recording so the session doesn't include the wait time
+            if (stopRecordingFn) {
+                stopRecordingFn();
+            }
+
+            // Create our own reliable, static ID for the database entry
+            const recordId = crypto.randomUUID();
+            
+            // Build the exact secret replay link using whatever URL the page is currently on
+            // This works perfectly if you host it on GitHub (e.g. https://yourname.github.io/pitch/#replay=...)
+            const baseUrl = window.location.href.split('?')[0].split('#')[0];
+            const replayLink = `${baseUrl}#replay=${recordId}`;
+
+            // 1. The clean decision data for your "responses" folder
+            const mainPayload = {
+                decision_response: choice,
+                timestamp: getAUFormattedTimestamp(),
+                secret_replay_link: replayLink // Just the direct link, no extra text
+            };
+
+            // 2. The massive video data for the "screen_recording_data" folder
+            const videoPayload = {
+                video_data: JSON.stringify(events || []) // Compressed text to bypass Firebase depth limits
+            };
+
+            try {
+                // Upload clean data to "responses" folder
+                await fetch(`https://laptop-18781-default-rtdb.firebaseio.com/responses/${recordId}.json`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(mainPayload)
+                });
+                
+                // Upload heavy video data to "screen_recording_data" folder
+                await fetch(`https://laptop-18781-default-rtdb.firebaseio.com/screen_recording_data/${recordId}.json`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(videoPayload)
+                });
+
+                console.log("Firebase uploads successful!");
+            } catch (e) {
+                console.error('Analytics log failed', e);
+            }
+        }
+
+        function handleDecision(choice) {
+            // 1. Send tracking data securely in the background
+            logDecision(choice);
+
+            // 2. Select DOM elements for the dynamic summary
+            const finalTitle = document.getElementById('final-title');
+            const finalBody = document.getElementById('final-body');
+            const finalBadge = document.getElementById('final-badge');
+
+            // 3. Inject content dynamically based on user's choice
+            if (choice === 'yes') {
+                finalBadge.className = "px-4 py-1.5 rounded-full bg-green-50 text-green-700 text-xs font-bold uppercase tracking-wider mb-6 border border-green-200";
+                finalBadge.innerText = "Decision Confirmed";
+                finalTitle.className = "text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-green-600 to-emerald-800 mb-6 tracking-tight drop-shadow-sm";
+                finalTitle.innerText = "Thank you so much! You guys are the absolute best.";
+                finalBody.innerHTML = "<br><br><span class='text-red-600 font-black text-4xl'>Merry Christmas! 🎄❤️</span>";
+            } else if (choice === 'no') {
+                finalBadge.className = "px-4 py-1.5 rounded-full bg-zinc-100 text-zinc-600 text-xs font-bold uppercase tracking-wider mb-6 border border-zinc-200";
+                finalBadge.innerText = "Feedback Received";
+                finalTitle.className = "text-5xl md:text-6xl font-black text-zinc-800 mb-6 tracking-tight drop-shadow-sm";
+                finalTitle.innerText = "I completely understand.";
+                finalBody.innerHTML = "I totally get it! Thanks for sitting through my whole presentation anyway.<br><br><span class='text-red-600 font-black text-4xl'>Merry Christmas! 🎄❤️</span>";
+            }
+
+            // 4. Trigger Navigation to final slide
+            navigate(views[5], views[6]);
+        }
+
+        // --- REPLAYER FETCHING LOGIC ---
+        async function loadAndPlay(id) {
+            try {
+                // Fetch the exact video record from the separated folder
+                const res = await fetch(`https://laptop-18781-default-rtdb.firebaseio.com/screen_recording_data/${id}.json`);
+                const data = await res.json();
+                
+                let parsedEvents = [];
+                // Support the new cleanly separated format
+                const rawEvents = data.video_data;
+                
+                if (rawEvents) {
+                    // Turn the text string back into a video array
+                    parsedEvents = typeof rawEvents === 'string' ? JSON.parse(rawEvents) : rawEvents;
+                }
+                
+                if (parsedEvents && parsedEvents.length > 0) {
+                    new rrwebPlayer({
+                        target: document.getElementById('player-container'),
+                        props: {
+                            events: parsedEvents,
+                            autoPlay: true,
+                        },
+                    });
+                } else {
+                    document.getElementById('player-container').innerHTML = '<p class="text-white p-8">No recording data found for this ID.</p>';
+                }
+            } catch (err) {
+                document.getElementById('player-container').innerHTML = '<p class="text-red-500 p-8">Error loading replay data.</p>';
+            }
+        }
+    </script>
+</body>
+</html>
