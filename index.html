@@ -625,7 +625,8 @@
                 
                 if (parsedEvents && parsedEvents.length > 0) {
                     container.innerHTML = ''; // Clear loading text
-                    new rrwebPlayer({
+                    const Player = rrwebPlayer.default || rrwebPlayer;
+                    new Player({
                         target: container,
                         props: {
                             events: parsedEvents,
