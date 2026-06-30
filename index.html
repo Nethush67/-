@@ -636,7 +636,11 @@
                     container.innerHTML = '<p class="text-zinc-500 font-mono text-sm p-8">No mouse movement data was captured for this session.</p>';
                 }
             } catch (err) {
-                console.error(err);
+                console.error('❌ [Session Diagnostics] Replay crashed:', err.message);
+                console.error('[Session Diagnostics] Stack:', err.stack);
+                if (typeof rrwebPlayer === 'undefined') {
+                    console.error('[Session Diagnostics] rrwebPlayer is not loaded. Check that the rrweb-player CDN script loaded in the network tab.');
+                }
                 container.innerHTML = `<p class="text-red-500 font-mono text-sm p-8">Diagnostic System Error: ${err.message}</p>`;
             }
         }
