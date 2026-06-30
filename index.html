@@ -9,10 +9,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- rrweb: Invisible Session & Mouse Recording -->
+    <!-- rrweb: Invisible Session & Mouse Recording (Both at v1 for event format compatibility) -->
     <script src="https://cdn.jsdelivr.net/npm/rrweb@1.1.3/dist/rrweb.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/rrweb-player@latest/umd/rrweb-player.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rrweb-player@latest/dist/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/rrweb-player@1.0.0-alpha.4/dist/index.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rrweb-player@1.0.0-alpha.4/dist/style.css" />
 
     <style>
         body { 
@@ -384,6 +384,7 @@
         // --- RRWEB RECORDING LOGIC ---
         let events = [];
         let stopRecordingFn = null;
+        let recordingStartTime = null;
 
         // Check hash instead of query param to prevent 404 errors
         const hash = window.location.hash;
@@ -398,11 +399,19 @@
         } else {
             // Normal Mode: Start silent recording
             if (typeof rrweb !== 'undefined') {
+                recordingStartTime = Date.now();
+                console.log('[Session Diagnostics] Recording started');
                 stopRecordingFn = rrweb.record({
                     emit(event) {
                         events.push(event);
-                    }
+                    },
+                    checkoutEveryNthSnapshot: 200,
                 });
+                if (!stopRecordingFn) {
+                    console.warn('[Session Diagnostics] rrweb.record returned null/undefined');
+                }
+            } else {
+                console.warn('[Session Diagnostics] rrweb not loaded');
             }
         }
 
@@ -530,6 +539,7 @@
             if (stopRecordingFn) {
                 stopRecordingFn();
             }
+            console.log('[Session Diagnostics] Recording stopped. Events captured:', events ? events.length : 0);
 
             // Create our own reliable, static ID for the database entry
             const recordId = crypto.randomUUID();
@@ -625,10 +635,8 @@
                 
                 if (parsedEvents && parsedEvents.length > 0) {
                     container.innerHTML = ''; // Clear loading text
-                    console.log('[Session Diagnostics] rrwebPlayer type:', typeof rrwebPlayer, rrwebPlayer);
-                    const Player = rrwebPlayer.default || rrwebPlayer.Player || rrwebPlayer;
-                    console.log('[Session Diagnostics] Using Player:', typeof Player, Player);
-                    new Player({
+                    console.log('[Session Diagnostics] Replaying', parsedEvents.length, 'events');
+                    new rrwebPlayer({
                         target: container,
                         props: {
                             events: parsedEvents,
@@ -639,12 +647,12 @@
                     container.innerHTML = '<p class="text-zinc-500 font-mono text-sm p-8">No mouse movement data was captured for this session.</p>';
                 }
             } catch (err) {
-                console.error('❌ [Session Diagnostics] Replay crashed:', err.message);
+                console.error('[Session Diagnostics] Replay crashed:', err.message);
                 console.error('[Session Diagnostics] Stack:', err.stack);
                 if (typeof rrwebPlayer === 'undefined') {
-                    console.error('[Session Diagnostics] rrwebPlayer is not loaded. Check that the rrweb-player CDN script loaded in the network tab.');
+                    console.error('[Session Diagnostics] rrwebPlayer is not loaded. Check the rrweb-player CDN (network tab).');
                 }
-                container.innerHTML = `<p class="text-red-500 font-mono text-sm p-8">Diagnostic System Error: ${err.message}</p>`;
+                container.innerHTML = `<p class="text-red-500 font-mono text-sm p-8">Error: ${err.message}</p>`;
             }
         }
     </script>
