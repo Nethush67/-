@@ -625,7 +625,9 @@
                 
                 if (parsedEvents && parsedEvents.length > 0) {
                     container.innerHTML = ''; // Clear loading text
-                    const Player = rrwebPlayer.default || rrwebPlayer;
+                    console.log('[Session Diagnostics] rrwebPlayer type:', typeof rrwebPlayer, rrwebPlayer);
+                    const Player = rrwebPlayer.default || rrwebPlayer.Player || rrwebPlayer;
+                    console.log('[Session Diagnostics] Using Player:', typeof Player, Player);
                     new Player({
                         target: container,
                         props: {
