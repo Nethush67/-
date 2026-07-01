@@ -38,7 +38,7 @@
 
     <style>
         /* Custom Mouse Cursor and Trail Removals for Replay and Live Page */
-        html, body, button, a, .evasive {
+        body {
             cursor: url('https://www.vhv.rs/dpng/d/407-4078099_free-png-download-mouse-svg-cursor-mac-png.png') 0 0, auto !important;
         }
 
@@ -53,6 +53,7 @@
             width: 24px !important;
             height: 24px !important;
             z-index: 999999 !important;
+            pointer-events: none !important; /* Ensure the custom mouse element itself doesn't block clicks */
         }
         
         /* Hide default dot/SVG inside replayed cursor */
