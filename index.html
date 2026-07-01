@@ -10,13 +10,14 @@
     <script>
         // Check hash to determine if we are in replay mode
         const hash = window.location.hash;
-        const isReplay = hash.startsWith('#replay=');
+        window.isReplay = hash.startsWith('#replay=');
+        window.replayId = window.isReplay ? hash.replace('#replay=', '') : null;
         
         window.rrEvents = [];
         window.rrStopRecording = null;
         window.rrRecordingStartTime = null;
 
-        if (!isReplay && typeof rrweb !== 'undefined') {
+        if (!window.isReplay && typeof rrweb !== 'undefined') {
             window.rrRecordingStartTime = Date.now();
             console.log('[Session Diagnostics] Early recording started');
             window.rrStopRecording = rrweb.record({
@@ -439,10 +440,9 @@
         let stopRecordingFn = window.rrStopRecording;
         let recordingStartTime = window.rrRecordingStartTime;
 
-        // Check hash instead of query param to prevent 404 errors
-        const hash = window.location.hash;
-        const isReplay = hash.startsWith('#replay=');
-        const replayId = isReplay ? hash.replace('#replay=', '') : null;
+        // Reuse global hash variables instead of redeclaring
+        const isReplay = typeof window.isReplay !== 'undefined' ? window.isReplay : false;
+        const replayId = typeof window.replayId !== 'undefined' ? window.replayId : null;
 
         if (isReplay) {
             // Replay Mode Activated
